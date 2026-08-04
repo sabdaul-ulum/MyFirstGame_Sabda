@@ -25,6 +25,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities")
 	class UAS_BaseStats* BaseStats;
 
+	UFUNCTION(BlueprintPure, Category = "Cooldown")
+	float GetCooldownTimeRemaining(FGameplayTag CooldownTag) const;
+
 protected:
 	// Dipanggil saat Player merasuki karakter ini
 	virtual void PossessedBy(AController* NewController) override;

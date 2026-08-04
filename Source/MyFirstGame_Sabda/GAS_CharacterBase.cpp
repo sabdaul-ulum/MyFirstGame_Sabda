@@ -28,3 +28,26 @@ void AGAS_CharacterBase::PossessedBy(AController* NewController)
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	}
 }
+
+float AGAS_CharacterBase::GetCooldownTimeRemaining(FGameplayTag CooldownTag) const
+{
+    if (AbilitySystemComponent)
+    {
+        // Create a search query based on Tags sent from the UI
+        FGameplayEffectQuery Query = FGameplayEffectQuery::MakeQuery_MatchAnyOwningTags(FGameplayTagContainer(CooldownTag));
+
+        // Retrieve all remaining time of effects that match the query
+        TArray<float> Durations = AbilitySystemComponent->GetActiveEffectsTimeRemaining(Query);
+
+        if (Durations.Num() > 0)
+        {
+            // Sort from smallest to largest
+            Durations.Sort();
+            // Return the largest number (longest remaining time)
+            return Durations.Last();
+        }
+    }
+
+    // If no cooldown is active, return 0
+    return 0.f;
+}
