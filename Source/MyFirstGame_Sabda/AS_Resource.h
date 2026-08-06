@@ -6,7 +6,7 @@
 #include "GameplayEffectExtension.h"
 #include "AS_Resource.generated.h"
 
-// Macro wajib GAS untuk membuat fungsi otomatis (Getter, Setter, Init)
+// Required GAS macro to auto-generate accessor functions (Getter, Setter, Init)
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \

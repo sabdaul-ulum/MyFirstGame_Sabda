@@ -29,6 +29,6 @@ public:
 	float GetCooldownTimeRemaining(FGameplayTag CooldownTag) const;
 
 protected:
-	// Dipanggil saat Player merasuki karakter ini
+	// Called when a controller possesses this character
 	virtual void PossessedBy(AController* NewController) override;
 };

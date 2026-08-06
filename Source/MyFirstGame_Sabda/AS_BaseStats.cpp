@@ -2,7 +2,7 @@
 
 UAS_BaseStats::UAS_BaseStats()
 {
-	// Constructor kosong
+	// Default constructor
 }
 
 void UAS_BaseStats::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
@@ -11,7 +11,7 @@ void UAS_BaseStats::PostGameplayEffectExecute(const FGameplayEffectModCallbackDa
 
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
-		// Clamp Health antara 0 dan MaxHealth
+		// Clamp Health between 0 and MaxHealth
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
 
 		if (GetHealth() <= 0.0f)
@@ -19,7 +19,7 @@ void UAS_BaseStats::PostGameplayEffectExecute(const FGameplayEffectModCallbackDa
 			UAbilitySystemComponent* ASC = GetOwningAbilitySystemComponent();
 			if (ASC)
 			{
-				// Tembakkan Tag Event.Death untuk memicu GA_Death
+				// Fire the Event.Death tag to trigger GA_Death
 				FGameplayTag DeathTag = FGameplayTag::RequestGameplayTag(FName("Event.Death"));
 				ASC->TryActivateAbilitiesByTag(FGameplayTagContainer(DeathTag));
 			}

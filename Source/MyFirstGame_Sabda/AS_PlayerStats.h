@@ -18,27 +18,27 @@ class MYFIRSTGAME_SABDA_API UAS_PlayerStats : public UAttributeSet
 	GENERATED_BODY()
 
 public:
-	// Konstruktor dasar
+	// Default constructor
 	UAS_PlayerStats();
 
-	// Variabel Health
+	// Health attribute
 	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_Health)
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UAS_PlayerStats, Health)
 
-		// Variabel MaxHealth
+		// MaxHealth attribute
 		UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_MaxHealth)
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UAS_PlayerStats, MaxHealth)
 
-		// Fungsi Wajib untuk Multiplayer/Replikasi (Meskipun game singleplayer, best practice memintanya ada)
+		// Required functions for multiplayer/replication (best practice even for singleplayer games)
 		UFUNCTION()
 	virtual void OnRep_Health(const FGameplayAttributeData& OldHealth);
 
 	UFUNCTION()
 	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth);
 
-	// Fungsi wajib untuk mereplikasi variabel
+	// Required function to register replicated properties
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;

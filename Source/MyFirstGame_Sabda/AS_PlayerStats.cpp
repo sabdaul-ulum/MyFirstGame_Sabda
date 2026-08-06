@@ -4,7 +4,7 @@
 
 UAS_PlayerStats::UAS_PlayerStats()
 {
-	// Mengatur nilai awal darah saat game dimulai
+	// Set initial health values when the game starts
 	InitHealth(100.0f);
 	InitMaxHealth(100.0f);
 }
@@ -23,7 +23,7 @@ void UAS_PlayerStats::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// Mendaftarkan variabel Health dan MaxHealth ke jaringan
+	// Register Health and MaxHealth for network replication
 	DOREPLIFETIME_CONDITION_NOTIFY(UAS_PlayerStats, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAS_PlayerStats, MaxHealth, COND_None, REPNOTIFY_Always);
 }
@@ -32,16 +32,16 @@ void UAS_PlayerStats::PostGameplayEffectExecute(const FGameplayEffectModCallback
 {
 	Super::PostGameplayEffectExecute(Data);
 
-	// Memeriksa apakah atribut yang berubah adalah Health
+	// Check if the modified attribute is Health
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
-		// Batasi nilai Health agar tidak di bawah 0 dan tidak melebihi MaxHealth
+		// Clamp Health so it stays between 0 and MaxHealth
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
 
-		// Cek apakah Health menyentuh 0 (Mati)
+		// Check if Health has reached 0 (Dead)
 		if (GetHealth() <= 0.0f)
 		{
-			// Mendapatkan Target Aktor (Avatar Aktor) yang memiliki AttributeSet ini
+			// Get the target actor (Avatar Actor) that owns this AttributeSet
 			AActor* TargetActor = nullptr;
 			if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
 			{
@@ -50,14 +50,14 @@ void UAS_PlayerStats::PostGameplayEffectExecute(const FGameplayEffectModCallback
 
 			if (TargetActor)
 			{
-				// Mengambil Ability System Component (ASC) dari Aktor tersebut
+				// Get the Ability System Component (ASC) from the actor
 				UAbilitySystemComponent* ASC = Data.Target.AbilityActorInfo->AbilitySystemComponent.Get();
 				if (ASC)
 				{
-					// Buat sebuah Gameplay Tag untuk memicu Ability Kematian
+					// Create a Gameplay Tag to trigger the Death Ability
 					FGameplayTag DeathTag = FGameplayTag::RequestGameplayTag(FName("GameplayAbility.Player.Death"));
 
-					// Trigger Ability menggunakan Tag
+					// Trigger the Ability using the Tag
 					ASC->TryActivateAbilitiesByTag(FGameplayTagContainer(DeathTag));
 				}
 			}
